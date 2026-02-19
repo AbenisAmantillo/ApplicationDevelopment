@@ -1,9 +1,11 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { IMG, ROUTES } from '../utils';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { setIsLoggedIn } = route.params || {};
   return (
     <View
       style={{
@@ -11,14 +13,14 @@ const HomeScreen = () => {
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 3,
-        borderColor: 'red',
+        borderColor: 'white',
       }}
     >
       <Image
         source={IMG.LOGO}
-        style={{ width: 320, height: 100 }}
+        style={{ width: 400, height: 200 }}
       />
-      <Text style={{ fontSize: 20 }}>HomeScreen</Text>
+      <Text style={{ fontSize: 20 }}></Text>
 
       {/* <Button title="GO TO PROFILE" /> */}
 
@@ -29,7 +31,7 @@ const HomeScreen = () => {
       >
         <View
           style={{
-            backgroundColor: 'green',
+            backgroundColor: 'gray',
             padding: 10,
             borderRadius: 20,
           }}
@@ -37,6 +39,28 @@ const HomeScreen = () => {
           <Text style={{ fontSize: 40, color: 'white' }}>VISIT PROFILE</Text>
         </View>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => {
+          if (setIsLoggedIn) {
+            setIsLoggedIn(false);
+          }
+        }}
+      >
+        <View
+          style={{
+            marginTop: 20,
+            backgroundColor: 'gray',
+            padding: 10,
+            borderRadius: 20,
+          }}
+        >
+          <Text style={{ fontSize: 40, color: 'white' }} >Log Out</Text>
+          
+        </View>
+      </TouchableOpacity>
+
+      
     </View>
   );
 };
