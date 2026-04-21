@@ -7,7 +7,11 @@ import ProfileScreen from '../screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 
-const MainNavigation = ({ setIsLoggedIn }) => {
+interface MainNavigationProps {
+  setIsLoggedIn?: (value: boolean) => void;
+}
+
+const MainNavigation = ({ setIsLoggedIn }: MainNavigationProps) => {
   return (
     <Stack.Navigator initialRouteName={ROUTES.HOME}>
       <Stack.Screen 

@@ -7,7 +7,11 @@ import Register from '../screens/auth/Register';
 
 const Stack = createStackNavigator();
 
-const AuthNavigation = ({ setIsLoggedIn }) => {
+interface AuthNavigationProps {
+  setIsLoggedIn?: (value: boolean) => void;
+}
+
+const AuthNavigation = ({ setIsLoggedIn }: AuthNavigationProps) => {
   return (
     <Stack.Navigator initialRouteName={ROUTES.LOGIN}>
       <Stack.Screen

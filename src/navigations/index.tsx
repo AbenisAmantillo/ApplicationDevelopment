@@ -1,14 +1,15 @@
-// utils
 import { NavigationContainer } from '@react-navigation/native';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Platform, StatusBar, useColorScheme } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import AuthNav from './AuthNav';
 import MainNav from './MainNav';
 
 export default () => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const auth = useSelector((state: any) => state.auth);
+  const isLoggedIn = !!auth?.data;
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -18,11 +19,7 @@ export default () => {
 
   return (
     <NavigationContainer>
-      {isLoggedIn ? (
-        <MainNav setIsLoggedIn={setIsLoggedIn} />
-      ) : (
-        <AuthNav setIsLoggedIn={setIsLoggedIn} />
-      )}
+      {isLoggedIn ? <MainNav setIsLoggedIn={undefined} /> : <AuthNav setIsLoggedIn={undefined} />}
     </NavigationContainer>
   );
 };

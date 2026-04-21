@@ -21,10 +21,14 @@ const { width } = Dimensions.get('window');
 const Login = () => {
   const [emailAdd, setEmailAdd] = useState('');
   const [password, setPassword] = useState('');
+  const [phoneNumber, setphoneNumber] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [confirmpassword, setConfirmPassword] = useState('');
 
   const navigation = useNavigation();
   const route = useRoute();
-  const { setIsLoggedIn } = route.params || {};
+  const { setIsLoggedIn } = (route.params as any) || {};
+
 
   return (
     <KeyboardAvoidingView
@@ -44,10 +48,6 @@ const Login = () => {
         >
           {/* Header Section with Logo/Icon */}
           <View style={{ alignItems: 'center', marginBottom: 40 }}>
-      <Image
-        source={IMG.LOGO}
-        style={{ width: 400, height: 200 }}
-      />
             <Text
               style={{
                 fontSize: 28,
@@ -56,10 +56,10 @@ const Login = () => {
                 marginBottom: 5,
               }}
             >
-              Welcome Back!
+              Create Account!
             </Text>
             <Text style={{ fontSize: 16, color: '#666' }}>
-              Sign in to continue
+              Fill out the fields to continue
             </Text>
           </View>
 
@@ -68,7 +68,8 @@ const Login = () => {
             <CustomTextInput
               label={'Email Address'}
               placeholder={'Enter your email'}
-              value={val => setEmailAdd(val)}
+              value={emailAdd}
+              onChangeText={(val: string) => setEmailAdd(val)}
               containerStyle={{
                 marginBottom: 15,
                 backgroundColor: 'white',
@@ -76,11 +77,6 @@ const Login = () => {
                 borderWidth: 1,
                 borderColor: '#e0e0e0',
                 paddingHorizontal: 5,
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.05,
-                shadowRadius: 3,
-                elevation: 2,
               }}
               textStyle={{
                 borderRadius: 10,
@@ -89,31 +85,64 @@ const Login = () => {
                 fontSize: 16,
                 paddingVertical: 12,
               }}
-              labelStyle={{
-                fontSize: 14,
-                fontWeight: '600',
-                color: '#555',
-                marginBottom: 5,
-                marginLeft: 5,
+            />
+
+            <CustomTextInput
+              label={'Phone Number'}
+              placeholder={'Enter your phone number'}
+              value={phoneNumber}
+              onChangeText={(val: string) => setphoneNumber(val)}
+              containerStyle={{
+                marginBottom: 15,
+                backgroundColor: 'white',
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: '#e0e0e0',
+                paddingHorizontal: 5,
+              }}
+              textStyle={{
+                borderRadius: 10,
+                color: '#333',
+                marginLeft: 10,
+                fontSize: 16,
+                paddingVertical: 12,
+              }}
+            />
+
+            <CustomTextInput
+              label={'Birthdate'}
+              placeholder={'MM/DD/YYYY'}
+              value={birthdate}
+              onChangeText={(val: string) => setBirthdate(val)}
+              containerStyle={{
+                marginBottom: 15,
+                backgroundColor: 'white',
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: '#e0e0e0',
+                paddingHorizontal: 5,
+              }}
+              textStyle={{
+                borderRadius: 10,
+                color: '#333',
+                marginLeft: 10,
+                fontSize: 16,
+                paddingVertical: 12,
               }}
             />
 
             <CustomTextInput
               label={'Password'}
               placeholder={'Enter your password'}
-              value={val => setPassword(val)}
+              value={password}
+              onChangeText={(val: string) => setPassword(val)}
               containerStyle={{
-                marginBottom: 10,
+                marginBottom: 15,
                 backgroundColor: 'white',
                 borderRadius: 12,
                 borderWidth: 1,
                 borderColor: '#e0e0e0',
                 paddingHorizontal: 5,
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.05,
-                shadowRadius: 3,
-                elevation: 2,
               }}
               textStyle={{
                 borderRadius: 10,
@@ -122,88 +151,61 @@ const Login = () => {
                 fontSize: 16,
                 paddingVertical: 12,
               }}
-              labelStyle={{
-                fontSize: 14,
-                fontWeight: '600',
-                color: '#555',
-                marginBottom: 5,
-                marginLeft: 5,
+            />
+
+            <CustomTextInput
+              label={'Confirm Password'}
+              placeholder={'Confirm your password'}
+              value={confirmpassword}
+              onChangeText={(val: string) => setConfirmPassword(val)}
+              containerStyle={{
+                marginBottom: 20,
+                backgroundColor: 'white',
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: '#e0e0e0',
+                paddingHorizontal: 5,
+              }}
+              textStyle={{
+                borderRadius: 10,
+                color: '#333',
+                marginLeft: 10,
+                fontSize: 16,
+                paddingVertical: 12,
               }}
             />
           </View>
 
-          {/* Login Button */}
+          {/* Buttons */}
           <CustomButton
-            label={'LOG IN'}
+            label={'CREATE ACCOUNT'}
             containerStyle={{
-              backgroundColor: '#4A90E2',
-              borderRadius: 12,
-              marginVertical: 20,
+              backgroundColor: '#1E3A8A',
+              borderRadius: 10,
+              marginVertical: 10,
               width: '100%',
-              paddingVertical: 5,
-              shadowColor: '#4A90E2',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 5,
-              elevation: 5,
             }}
             textStyle={{
               color: 'white',
               fontWeight: 'bold',
-              fontSize: 18,
-              paddingVertical: 10,
+              fontSize: 16,
             }}
             onPress={() => {
-              if (emailAdd === 'admin' && password === 'password') {
-                Alert.alert(
-                  'Successful Login',
-                  'You have been logged in successfully.',
-                  [
-                    {
-                      text: 'Continue',
-                      onPress: () => {
-                        if (setIsLoggedIn) {
-                          setIsLoggedIn(true);
-                        }
-                      },
-                      style: 'default',
-                    },
-                  ],
-                );
-              } else {
-                Alert.alert(
-                  'Invalid Credentials',
-                  'Please enter valid email and password',
-                  [{ text: 'Try Again' }],
-                );
-              }
+              Alert.alert('Account Created', 'Your account has been created successfully');
             }}
           />
-          {/* Register Link */}
-          <View
+
+          <TouchableOpacity
+            onPress={() => (navigation as any).navigate(ROUTES.LOGIN)}
             style={{
-              flexDirection: 'row',
+              marginVertical: 10,
               alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: 20,
-              marginBottom: 10,
             }}
           >
-            <Text style={{ color: '#666', fontSize: 15 }}>
-              Don't have an account?{' '}
+            <Text style={{ color: '#1E3A8A', fontWeight: 'bold', fontSize: 14 }}>
+              Already have an account? Login
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate(ROUTES.REGISTER)}>
-              <Text
-                style={{
-                  color: '#4A90E2',
-                  fontWeight: 'bold',
-                  fontSize: 16,
-                }}
-              >
-                Sign Up
-              </Text>
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
