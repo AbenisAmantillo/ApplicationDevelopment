@@ -38,3 +38,5 @@ const CustomTextInput = ({
 };
 
 export default CustomTextInput;
+
+//CustomTextInput component

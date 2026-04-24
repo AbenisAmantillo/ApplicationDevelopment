@@ -26,3 +26,5 @@ const CustomButton = ({ containerStyle, textStyle, label, onPress }: CustomButto
 };
 
 export default CustomButton;
+
+//CustomButton component
