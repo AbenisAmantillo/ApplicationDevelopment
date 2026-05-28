@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -25,6 +26,7 @@ import { ClientScreenHeader } from '../components/ClientScreenHeader';
 import { ErrorBanner } from '../components/ErrorBanner';
 import { EstateEmpty, EstateHero, SectionHeader } from '../components/estate';
 import { LoadingView } from '../components/LoadingView';
+import { useAutoRefresh } from '../hooks/useAutoRefresh';
 import { estate, estateStyles } from '../theme/estate';
 import { ROUTES } from '../utils';
 import { assetUrl, profileImageUrl } from '../utils/api';
@@ -86,8 +88,10 @@ export default function AdminResourceScreen({ resource }: Props) {
   const [error, setError] = useState('');
   const isNotifications = resource === 'notifications';
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const load = useCallback(async (options?: { silent?: boolean }) => {
+    if (!options?.silent) {
+      setLoading(true);
+    }
     setError('');
     try {
       setRecords(await config.load());
@@ -95,13 +99,32 @@ export default function AdminResourceScreen({ resource }: Props) {
       setError(getErrorMessage(e));
       setRecords([]);
     } finally {
-      setLoading(false);
+      if (!options?.silent) {
+        setLoading(false);
+      }
     }
   }, [config]);
 
-  useEffect(() => {
-    load();
+  const silentRefresh = useCallback(() => {
+    void load({ silent: true });
   }, [load]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  const skipNextFocusRefresh = useRef(true);
+  useFocusEffect(
+    useCallback(() => {
+      if (skipNextFocusRefresh.current) {
+        skipNextFocusRefresh.current = false;
+        return;
+      }
+      void silentRefresh();
+    }, [silentRefresh]),
+  );
+
+  useAutoRefresh(silentRefresh);
 
   const loadClients = useCallback(async () => {
     if (!isNotifications) return;

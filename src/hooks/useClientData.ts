@@ -1,5 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { getErrorMessage } from '../api/client';
+import { useAutoRefresh } from './useAutoRefresh';
 import { fetchFurniture } from '../api/furniture';
 import { fetchPayments } from '../api/payments';
 import { fetchProperties } from '../api/properties';
@@ -22,9 +24,11 @@ export function useClientData() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const load = useCallback(async (): Promise<Payment[]> => {
+  const load = useCallback(async (options?: { silent?: boolean }): Promise<Payment[]> => {
     if (!user) return [];
-    setLoading(true);
+    if (!options?.silent) {
+      setLoading(true);
+    }
     setError('');
     try {
       const [props, furn, txs, pays] = await Promise.all([
@@ -46,13 +50,32 @@ export function useClientData() {
       setError(getErrorMessage(e));
       return [];
     } finally {
-      setLoading(false);
+      if (!options?.silent) {
+        setLoading(false);
+      }
     }
   }, [user]);
 
-  useEffect(() => {
-    load();
+  const silentRefresh = useCallback(() => {
+    void load({ silent: true });
   }, [load]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  const skipNextFocusRefresh = useRef(true);
+  useFocusEffect(
+    useCallback(() => {
+      if (skipNextFocusRefresh.current) {
+        skipNextFocusRefresh.current = false;
+        return;
+      }
+      void silentRefresh();
+    }, [silentRefresh]),
+  );
+
+  useAutoRefresh(silentRefresh, { enabled: Boolean(user) });
 
   const availableProperties = properties
     .filter(p => isPropertyAvailable(p.status))

@@ -6,6 +6,7 @@ import notifee from '@notifee/react-native';
 import axios from 'axios';
 
 import { apiClient } from '../api/client';
+import { requestDataRefresh } from './dataRefresh';
 import { markNotificationSeen } from './notificationAlertState';
 
 export const PUSH_CHANNEL_ID = 'amantillo_notifications_sound_v2';
@@ -78,6 +79,7 @@ function showForegroundNotification(
       markNotificationSeen(String(id));
     }
     void showLocalNotification(title, body).catch(() => undefined);
+    requestDataRefresh();
   }
 }
 

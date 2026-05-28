@@ -9,6 +9,7 @@ import {
   hasNotificationSeen,
   markNotificationSeen,
 } from '../utils/notificationAlertState';
+import { requestDataRefresh } from '../utils/dataRefresh';
 import { showLocalNotification } from '../utils/notifications';
 
 const POLL_INTERVAL_MS = 3_000;
@@ -72,6 +73,7 @@ export function useClientNotificationAlerts(): void {
 
           const title = item.title?.trim() || 'Amantillo notification';
           await showLocalNotification(title, body);
+          requestDataRefresh();
         }
       } catch {
         // Notifications API may be unavailable; skip this poll.
