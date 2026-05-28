@@ -1,12 +1,18 @@
 export default {
-  // Auth
   LOGIN: 'Login',
   REGISTER: 'Register',
-  ERROR: 'Error',
-
-  // Main
-  HOME: 'Home',
+  STAFF_BLOCKED: 'StaffBlocked',
+  MAIN_TABS: 'MainTabs',
+  DASHBOARD: 'Dashboard',
+  HOME: 'Dashboard',
+  CATALOG: 'Catalog',
+  TRANSACTIONS: 'Transactions',
+  ADMIN_NOTIFICATIONS: 'AdminNotifications',
+  ACTIVITY_LOGS: 'ActivityLogs',
+  DATA_RECORDS: 'DataRecords',
+  CHECKOUT: 'Checkout',
+  PAYMENT: 'Payment',
+  MY_TRANSACTIONS: 'MyTransactions',
   PROFILE: 'Profile',
-};
-
-//Route definitions for the app, providing a centralized place to manage screen names and navigation paths, improving maintainability and reducing the risk of typos in navigation code.
+  LANDING: 'Landing',
+} as const;

@@ -1,7 +1,8 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
-
+apply plugin: "com.google.gms.google-services"
+apply plugin: "com.google.firebase.crashlytics"
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -72,6 +73,27 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
+// Load signing credentials from `local.properties` (kept out of git).
+// Example values:
+// RELEASE_STORE_FILE=amantillo-release.keystore
+// RELEASE_STORE_PASSWORD=*****
+// RELEASE_KEY_ALIAS=amantillo
+// RELEASE_KEY_PASSWORD=*****
+def keystoreProperties = new java.util.Properties()
+def keystorePropertiesCandidates = [
+        // Android project's local.properties (usually contains sdk.dir)
+        rootProject.file('local.properties'),
+        // Repo root local.properties (optional; useful for sharing signing vars outside /android)
+        rootProject.file('../local.properties'),
+]
+keystorePropertiesCandidates.each { f ->
+    if (f.exists()) {
+        f.withInputStream { stream ->
+            keystoreProperties.load(stream)
+        }
+    }
+}
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -84,6 +106,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [usesCleartextTraffic: "true"]
     }
     signingConfigs {
         debug {
@@ -91,6 +114,30 @@ android {
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
+        }
+        release {
+            def releaseStoreFilePath = keystoreProperties.getProperty('RELEASE_STORE_FILE')
+            def releaseStorePassword = keystoreProperties.getProperty('RELEASE_STORE_PASSWORD')
+            def releaseKeyAlias = keystoreProperties.getProperty('RELEASE_KEY_ALIAS')
+            def releaseKeyPassword = keystoreProperties.getProperty('RELEASE_KEY_PASSWORD')
+
+            if (!releaseStoreFilePath) {
+                throw new GradleException("Missing RELEASE_STORE_FILE in local.properties (used for release signing).")
+            }
+            if (!releaseStorePassword) {
+                throw new GradleException("Missing RELEASE_STORE_PASSWORD in local.properties (used for release signing).")
+            }
+            if (!releaseKeyAlias) {
+                throw new GradleException("Missing RELEASE_KEY_ALIAS in local.properties (used for release signing).")
+            }
+            if (!releaseKeyPassword) {
+                throw new GradleException("Missing RELEASE_KEY_PASSWORD in local.properties (used for release signing).")
+            }
+
+            storeFile file(releaseStoreFilePath)
+            storePassword releaseStorePassword
+            keyAlias releaseKeyAlias
+            keyPassword releaseKeyPassword
         }
     }
     buildTypes {
@@ -100,7 +147,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -110,10 +157,12 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
     }
+
 }

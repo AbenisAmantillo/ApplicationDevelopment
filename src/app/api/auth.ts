@@ -1,5 +1,7 @@
+import { API_BASE_URL } from '../../config/env';
+
 export async function userLogin({ username, password }: { username: string; password: string }) {
-    const BASE_URL = "http://192.168.5.201:8000";
+    const BASE_URL = API_BASE_URL;
     const options = {
         method: 'POST',
         headers: {
@@ -17,7 +19,7 @@ export async function userLogin({ username, password }: { username: string; pass
     let data;
     try {
         data = await response.json();
-    } catch (e) {
+    } catch {
         data = null;
     }
 

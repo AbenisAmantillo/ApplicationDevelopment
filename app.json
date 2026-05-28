@@ -1,4 +1,7 @@
 {
   "name": "Amantillo",
-  "displayName": "Amantillo"
+  "displayName": "Amantillo",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-6227195459397400~2558626019"
+  }
 }

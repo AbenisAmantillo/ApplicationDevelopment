@@ -1,4 +1,35 @@
-export { default as IMG } from './images';
 export { default as ROUTES } from './routes';
-
-//Utility index file exporting commonly used constants and assets, such as images and route definitions, for easy import throughout the app.
+export { formatCurrency } from './formatCurrency';
+export { extractCollection, resourceIri, resolveId } from './hydra';
+export {
+  isFullyPaid,
+  canCreateTransaction,
+  paymentsForTransaction,
+  getNextPendingPayment,
+  getFollowingDueDate,
+  formatDueDate,
+  getTransactionPaymentSummary,
+  formatMonthsLeft,
+} from './payments';
+export type { TransactionPaymentSummary } from './payments';
+export {
+  attachTransactionFurniture,
+  normalizeTransaction,
+  normalizeTransactionFurnitureLine,
+} from './transaction';
+export { IMG, propertyImageUrl, furnitureImageUrl } from './images';
+export {
+  ADMIN_ROLE,
+  STAFF_ROLE,
+  isAdmin,
+  isStaffOrAdmin,
+  isStaff,
+  primaryRole,
+  isPropertyAvailable,
+  isFurnitureAvailable,
+  isCurrentUserCustomer,
+  userIdFromToken,
+  rolesFromToken,
+  usernameFromToken,
+  isTokenExpired,
+} from './user';

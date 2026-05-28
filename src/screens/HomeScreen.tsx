@@ -1,6 +1,5 @@
 import { useCallback, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
 import {
   Animated,
   Image,
@@ -11,8 +10,8 @@ import {
   View,
   Alert,
 } from 'react-native';
+import { useAuth } from '../auth/AuthContext';
 import { IMG, ROUTES } from '../utils';
-import { authLogout } from '../app/action';
 
 interface ButtonProps {
   label: string;
@@ -29,7 +28,7 @@ const Button = ({ label, onPress, style, textStyle }: ButtonProps) => (
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
+  const { logout } = useAuth();
   const bounceValue = useRef(new Animated.Value(1)).current;
 
   const handleNavigateToProfile = useCallback(() => {
@@ -45,12 +44,12 @@ const HomeScreen = () => {
         {
           text: 'Log Out',
           onPress: () => {
-            dispatch(authLogout());
+            void logout();
           },
         },
       ]
     );
-  }, [dispatch]);
+  }, [logout]);
 
   return (
     <SafeAreaView style={styles.safeArea}>

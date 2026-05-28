@@ -14,10 +14,11 @@ interface MainNavigationProps {
 const MainNavigation = ({ setIsLoggedIn }: MainNavigationProps) => {
   return (
     <Stack.Navigator initialRouteName={ROUTES.HOME}>
-      <Stack.Screen 
-        name={ROUTES.HOME} 
+      <Stack.Screen
+        name={ROUTES.HOME}
         component={HomeScreen}
         initialParams={{ setIsLoggedIn }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen name={ROUTES.PROFILE} component={ProfileScreen} />
     </Stack.Navigator>

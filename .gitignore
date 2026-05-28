@@ -35,6 +35,13 @@ local.properties
 !debug.keystore
 .kotlin/
 
+# Local API config (Symfony URL only — never DATABASE_URL)
+.env.local
+
+# Firebase (download from Firebase Console; use *.example templates)
+android/app/google-services.json
+ios/Amantillo/GoogleService-Info.plist
+
 # node.js
 #
 node_modules/
@@ -73,3 +80,8 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Expo
+.expo
+dist/
+web-build/

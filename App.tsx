@@ -1,21 +1,25 @@
-import React from 'react';
-import { View } from 'react-native';
-import AppNav from './src/navigations';
+import React, { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import rootSaga from './src/app/sagas';
-import configureStore from './src/app/reducers';
-import { Provider } from 'react-redux';
 
-const { store, runSaga } = configureStore();
-runSaga(rootSaga);
+import { AuthProvider } from './src/auth/AuthContext';
+import RootNavigator from './src/navigation/RootNavigator';
+import { bootstrapFirebase } from './src/utils/firebase';
 
 const App = () => {
+  useEffect(() => {
+    bootstrapFirebase();
+  }, []);
+
   return (
-    <Provider store={store}>
-      <View style={{ flex: 1 }}>
-        <AppNav />
-      </View>
-    </Provider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <AuthProvider>
+          <RootNavigator />
+        </AuthProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 };
 
